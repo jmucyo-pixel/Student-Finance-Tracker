@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Finance Tracker</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
 
+<header>
+  <h1>Student Finance Tracker</h1>
+  <nav aria-label="Main navigation">
+    <ul class="nav-list">
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#records">Records</a></li>
+      <li><a href="#form-section">Add / Edit</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main">
+  <!-- Dashboard -->
+    <section id="dashboard">
+    <h2>Dashboard</h2>
+    <p>Welcome to your Student Finance Tracker!</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label"><strong>Total Records</strong></span>
+        <span class="stat-value" id="total-records">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label"><strong>Total Expenses</strong></span>
+        <span class="stat-value" id="total-expenses">$0.00</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label"><strong>Top Category</strong></span>
+        <span class="stat-value" id="top-category">$0.00</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label"><strong>Last 7 days</strong></span>
+        <span class="stat-value" id="last-7-days">$0.00</span>
+      </div>
+    </div>
+    
+
+  </section>
+</main>
+</body>
+</html>
