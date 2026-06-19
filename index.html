@@ -23,8 +23,8 @@
 </header>
 <main id="main">
   <!-- Dashboard -->
-    <section id="dashboard">
-    <h2>Dashboard</h2>
+    <section id="dashboard" aria-labelledby="dashboard-heading">
+    <h2 id="dashboard-heading">Dashboard</h2>
     <p>Welcome to your Student Finance Tracker!</p>
     <div class="stats-grid">
       <div class="stat-card">
@@ -44,9 +44,30 @@
         <span class="stat-value" id="last-7-days">$0.00</span>
       </div>
     </div>
-    
-
+    <div class="cap-section">
+      <label for="cap-input"><strong> Spending Cap </strong></label>
+      <input type="number" id="cap-input" min="0" step="0.01" value="200">
+      <p id="cap-status" role="status" aria-live="polite"></p>
+    </div>
   </section>
+  <!-- Records -->
+  <section id="records" aria-labelledby="records-heading">
+    <h2 id="records-heading" >Records</h2>
+    
+    <table id="records-table" aria-label="Expense Records">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Category</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Description</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="records-tbody">
+        <!-- Records will be dynamically inserted here -->
+      </tbody>
+    </table>   
 </main>
 </body>
 </html>
