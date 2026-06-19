@@ -5,9 +5,13 @@ import { loadRecords, saveRecords, loadSettings, saveSettings } from './storage.
 let records = loadRecords();
 let settings = loadSettings();
 
-// Apply persisted theme on load
-if (settings.theme === 'dark') {
-  document.documentElement.setAttribute('data-theme', 'dark');
+// Apply persisted theme on load — called from app.js init() after DOMContentLoaded
+export function applyTheme() {
+  if (settings.theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
 }
 
 // Get a shallow copy of all records. 
