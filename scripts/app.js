@@ -2,22 +2,22 @@
 
 import {
   getRecords, addRecord, updateRecord, deleteRecord, findRecord,
-  replaceAllRecords, getSettings, updateSettings,
+  replaceAllRecords, getSettings, updateSettings, applyTheme,
   getTotalSum, getTotalCount, getTopCategory, getLast7DaysTrend, getLast7DaysSum
-} from '../state.js';
+} from './state.js';
 
 import {
   validateDescription, validateAmount, validateDate, validateCategory
 } from './validators.js';
 
-import { searchRecords, sortRecords } from '../search.js';
+import { searchRecords, sortRecords } from './search.js';
 
 import {
   renderRecords, renderStats, renderTrendChart, renderCapStatus,
   setFieldError, setFormStatus, setSearchStatus, setSettingsStatus
 } from './ui.js';
 
-import { validateImportedRecords } from '../storage.js';
+import { validateImportedRecords } from './storage.js';
 
 // Element references 
 const form = document.getElementById('record-form');
@@ -47,6 +47,7 @@ const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
 // Initialization
 function init() {
+  applyTheme(); // restore saved theme before anything renders
   const settings = getSettings();
   capInput.value = settings.cap;
   rateEurInput.value = settings.rates.EUR;
@@ -329,13 +330,10 @@ function attachThemeToggle() {
   themeToggleBtn.addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const newTheme = isDark ? 'light' : 'dark';
-    if (newTheme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
     updateSettings({ theme: newTheme });
-    setSettingsStatus(`Switched to ${newTheme} theme.`);
+    applyTheme(); // single source of truth for setting data-theme
+    themeToggleBtn.textContent = newTheme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode';
+    setSettingsStatus(`Switched to ${newTheme} mode.`);
   });
 }
 
