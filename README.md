@@ -5,6 +5,7 @@ spending: budgets, transactions, categories, currency conversion, and live
 regex-powered search. Hope you enjoy!
 
 **Live demo:** https://jmucyo-pixel.github.io/Student-Finance-Tracker
+**Live demo video:** https://youtu.be/Jn9cwTHFnbY
 
 
 ---
