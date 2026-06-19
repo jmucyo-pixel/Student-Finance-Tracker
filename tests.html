@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tests - Student Finance Tracker</title>
+<style>
+  body { font-family: monospace; padding: 2rem; background: #111; color: #eee; }
+  .pass { color: #4cc987; }
+  .fail { color: #ff6b60; }
+  ul { line-height: 1.8; }
+</style>
+</head>
+<body>
+<h1>Validator & Search Tests</h1>
+<ul id="results"></ul>
+
+<script type="module">
+import {
+  validateDescription, validateAmount, validateDate, validateCategory,
+  RE_DUPLICATE_WORD, compileRegex, highlight
+} from './scripts/validators.js';
+import { searchRecords, sortRecords } from './scripts/search.js';
+
+const results = document.getElementById('results');
+let pass = 0, fail = 0;
+
+function assert(name, condition) {
+  const li = document.createElement('li');
+  if (condition) {
+    li.textContent = `PASS: ${name}`;
+    li.className = 'pass';
+    pass++;
+  } else {
+    li.textContent = `FAIL: ${name}`;
+    li.className = 'fail';
+    fail++;
+  }
+  results.appendChild(li);
+}
+
+/* --- Description validation --- */
+assert('valid description passes', validateDescription('Lunch at cafeteria') === '');
+assert('leading space fails', validateDescription(' Lunch') !== '');
+assert('trailing space fails', validateDescription('Lunch ') !== '');
+assert('double space fails', validateDescription('Lunch  at cafe') !== '');
+assert('duplicate word detected', validateDescription('Lunch lunch at cafe') !== '');
+
+/* --- Amount validation --- */
+assert('valid amount passes', validateAmount('12.50') === '');
+assert('valid integer amount passes', validateAmount('45') === '');
+assert('zero amount fails (must be > 0)', validateAmount('0') !== '');
+assert('negative amount fails', validateAmount('-5') !== '');
+assert('too many decimals fails', validateAmount('12.555') !== '');
+assert('leading zero fails', validateAmount('012.50') !== '');
+
+/* --- Date validation --- */
+assert('valid date passes', validateDate('2025-09-29') === '');
+assert('invalid month fails', validateDate('2025-13-01') !== '');
+assert('invalid day fails', validateDate('2025-02-30') !== '');
+assert('wrong format fails', validateDate('29-09-2025') !== '');
+
+/* --- Category validation --- */
+assert('valid category passes', validateCategory('Food') === '');
+assert('hyphenated category passes', validateCategory('Eating-Out') === '');
+assert('category with numbers fails', validateCategory('Food2') !== '');
+assert('category with double space fails', validateCategory('Food  Stuff') !== '');
+
+/* --- Advanced regex: duplicate word back-reference --- */
+assert('back-reference matches duplicate', RE_DUPLICATE_WORD.test('the the cat'));
+assert('back-reference does not match unique words', !RE_DUPLICATE_WORD.test('the cat sat'));
+
+/* --- Safe regex compiler --- */
+assert('compileRegex returns null for empty input', compileRegex('') === null);
+assert('compileRegex returns null for invalid pattern', compileRegex('(unclosed') === null);
+assert('compileRegex returns RegExp for valid pattern', compileRegex('coffee') instanceof RegExp);
+
+/* --- Highlight --- */
+assert('highlight wraps match in <mark>', highlight('I love coffee', compileRegex('coffee')) === 'I love <mark>coffee</mark>');
+assert('highlight escapes HTML in text', highlight('<script>', null) === '&lt;script&gt;');
+
+/* --- Search --- */
+const sample = [
+  { id: '1', description: 'Coffee with friends', amount: 8.75, category: 'Entertainment', date: '2025-09-28' },
+  { id: '2', description: 'Tea and snacks', amount: 3.20, category: 'Food', date: '2025-09-29' },
+  { id: '3', description: 'Bus pass', amount: 45.00, category: 'Transport', date: '2025-09-20' }
+];
+
+assert('search finds coffee/tea via alternation', searchRecords(sample, '(coffee|tea)', true).results.length === 2);
+assert('search with cents pattern finds amounts with .XX', searchRecords(sample, '\\.\\d{2}\\b', true).results.length === 0); // description/category/date only
+assert('invalid regex returns error', searchRecords(sample, '(unclosed', true).error !== null);
+assert('empty pattern returns all records', searchRecords(sample, '', true).results.length === 3);
+
+/* --- Sort --- */
+const sortedByAmount = sortRecords(sample, 'amount-asc');
+assert('sort by amount ascending', sortedByAmount[0].id === '2' && sortedByAmount[2].id === '3');
+
+const sortedByDate = sortRecords(sample, 'date-desc');
+assert('sort by date descending', sortedByDate[0].id === '2');
+
+/* --- Summary --- */
+const summary = document.createElement('h2');
+summary.textContent = `${pass} passed, ${fail} failed`;
+summary.style.color = fail === 0 ? '#4cc987' : '#ff6b60';
+document.body.appendChild(summary);
+</script>
+</body>
+</html>
