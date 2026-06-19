@@ -4,7 +4,7 @@ A vanilla HTML/CSS/JS, accessible, mobile-first web app for tracking student
 spending: budgets, transactions, categories, currency conversion, and live
 regex-powered search. Hope you enjoy!
 
-**Live demo:** [`https://github.com/jmucyo-pixel/Student-Finance-Tracker`]
+**Live demo:** [`https://jmucyo-pixel.github.io/Student-Finance-Tracker/`]
 
 
 ---
