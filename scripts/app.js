@@ -4,20 +4,20 @@ import {
   getRecords, addRecord, updateRecord, deleteRecord, findRecord,
   replaceAllRecords, getSettings, updateSettings,
   getTotalSum, getTotalCount, getTopCategory, getLast7DaysTrend, getLast7DaysSum
-} from './state.js';
+} from '../state.js';
 
 import {
   validateDescription, validateAmount, validateDate, validateCategory
 } from './validators.js';
 
-import { searchRecords, sortRecords } from './search.js';
+import { searchRecords, sortRecords } from '../search.js';
 
 import {
   renderRecords, renderStats, renderTrendChart, renderCapStatus,
   setFieldError, setFormStatus, setSearchStatus, setSettingsStatus
 } from './ui.js';
 
-import { validateImportedRecords } from './storage.js';
+import { validateImportedRecords } from '../storage.js';
 
 // Element references 
 const form = document.getElementById('record-form');
